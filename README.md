@@ -2,13 +2,21 @@
 
 A full-stack **Django + Stripe Checkout** application that allows users to browse products, add them to the cart, make secure payments, and view their order history.
 
+🔄 Project Flow
+
+1️⃣ Home Page – Shows 3 fixed products where users enter quantity and click Buy.
+2️⃣ Checkout – Sends data to Django backend to create a Stripe Checkout Session.
+3️⃣ Payment – User is redirected to Stripe’s test payment page for secure payment.
+4️⃣ Order Creation – After successful payment, an Order is saved in the database with payment details.
+5️⃣ My Orders – Users can view all past orders, total amount, and payment status.
+6️⃣ Admin – Manage products, orders, and transactions.
 ---
 
 ## 🖼️ Screenshots
 
-| Register | Home | Checkout | Stripe | Payment | View Order | Order History |
+| Register | Main | Checkout | Stripe | Payment | View Order | Order History |
 |-----------|------|-----------|---------|-----------|-------------|----------------|
-| ![Register](images/Register.png) | ![Main](images/main.png) | ![Checkout](images/checkout.png) | ![Stripe](images/stripe.png) | ![Payment](images/payment.png) | ![View Order](images/vieworder.png) | ![View Order History](images/vieworderhistory.png) |
+| <img src="images/Register.png" width="200"/> | <img src="images/main.png" width="200"/> | <img src="images/checkout.png" width="200"/> | <img src="images/stripe.png" width="200"/> | <img src="images/payment.png" width="200"/> | <img src="images/vieworder.png" width="200"/> | <img src="images/vieworderhistory.png" width="200"/> |
 
 
 ---
@@ -52,68 +60,108 @@ A full-stack **Django + Stripe Checkout** application that allows users to brows
 
 ---
 
+Here’s your **README Setup & Installation** section rewritten in clean and properly formatted Markdown syntax 👇
+
+---
+
 ## 🛠️ Setup & Installation
 
 ### 1️⃣ Clone the Repository
+
 ```bash
 git clone https://github.com/pratik0049/VipraTech_Assignment.git
 cd VipraTech_Assignment
-2️⃣ Create and Activate a Virtual Environment
-bash
-Copy code
-python -m venv venv
-.\venv\Scripts\activate  # Windows
-# or
-source venv/bin/activate  # macOS/Linux
-3️⃣ Install Dependencies
-bash
-Copy code
-pip install -r requirements.txt
-4️⃣ Create the .env File
-Copy values from .env.example and update credentials.
+```
 
-5️⃣ Run Migrations
-bash
-Copy code
-python manage.py migrate
-6️⃣ Load Sample Products
-bash
-Copy code
-python manage.py seed_products
-7️⃣ Start the Development Server
-bash
-Copy code
-python manage.py runserver
-🧾 Example .env File
-env
-Copy code
+---
+
+### 2️⃣ Create and Activate a Virtual Environment
+
+```bash
+# Create virtual environment
+python -m venv venv
+
+# Activate on Windows
+.\venv\Scripts\activate
+
+# Activate on macOS/Linux
+source venv/bin/activate
+```
+
+---
+
+### 3️⃣ Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+### 4️⃣ Create the `.env` File
+
+Copy the values from `.env.example` and update your credentials accordingly.
+
+Example:
+
+```env
 DB_NAME=shop_db
 DB_USER=postgres
 DB_PASSWORD=your_password
+
 STRIPE_SECRET_KEY=sk_test_...
 STRIPE_PUBLISHABLE_KEY=pk_test_...
-🧩 Code Quality & Architecture Notes
-✅ Strengths
-Separation of concerns
+```
 
-Models → Data structure
+---
 
-Views → Business logic
+### 5️⃣ Run Migrations
 
-Utils → Third-party integrations
+```bash
+python manage.py migrate
+```
 
-Security
+---
 
-Authentication required for order placement
+### 6️⃣ Load Sample Products
 
-CSRF protection enabled
+```bash
+python manage.py seed_products
+```
 
-Stripe keys stored in environment variables
+---
 
-User Experience
+### 7️⃣ Start the Development Server
 
-Simple, intuitive UI
+```bash
+python manage.py runserver
+```
 
-Clear error messages
+Then open your browser and visit 👉 **[http://127.0.0.1:8000/](http://127.0.0.1:8000/)**
 
-“My Orders” section shows recent payments
+---
+
+## 🧩 Code Quality & Architecture Notes
+
+### ✅ Strengths
+
+**Separation of Concerns**
+
+* **Models** → Define data structure
+* **Views** → Contain business logic
+* **Utils** → Handle third-party integrations
+
+**Security**
+
+* Authentication required for order placement
+* CSRF protection enabled
+* Stripe keys stored securely in environment variables
+
+**User Experience**
+
+* Simple, intuitive UI
+* Clear error messages
+* “My Orders” section shows recent payments
+
+---
+
