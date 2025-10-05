@@ -1,94 +1,164 @@
 # ShopApp - Django E-commerce with Stripe Integration
 
-## Implementation Choices & Assumptions
+## 🔄 Project Flow
 
-### Assumptions Made
-1. Single currency (USD) operation
-2. Simple product catalog without categories/tags
-3. No inventory management required
-4. Single shipping address per order
-5. Users must be registered to place orders
+1️⃣ **Home Page**  
+- Displays 3 fixed products.  
+- Users can enter quantities and click **Buy**.
 
-### Technical Decisions
+2️⃣ **Checkout**  
+- Sends order data to the Django backend.  
+- Creates a **Stripe Checkout Session** for secure payment.
 
-#### Stripe Checkout vs Payment Intents
-- Chose **Stripe Checkout** over Payment Intents for:
-  - Faster implementation with built-in UI
-  - Pre-built security and compliance
-  - Mobile-responsive design out of the box
-  - Simpler integration with fewer edge cases to handle
+3️⃣ **Payment**  
+- User is redirected to **Stripe’s test payment page**.  
+- Payment is completed securely.
 
-#### Preventing Double Charges & Race Conditions
-1. Order status tracking:
-   - Orders created as 'pending'
-   - Status updated to 'paid' only after successful Stripe webhook
-   - Double-check in success handler prevents duplicate processing
+4️⃣ **Order Creation**  
+- After successful payment, an **Order** is saved in the database.  
+- Stores payment details like amount, status, and timestamp.
 
-2. Session handling:
-   - Stripe session ID tied to order via metadata
-   - Order status verified before processing payment success
+5️⃣ **My Orders**  
+- Users can view all past orders.  
+- Displays **total amount** and **payment status** for each order.
 
-## Setup & Installation
+6️⃣ **Admin Panel**  
+- Manage **products**, **orders**, and **transactions**.
 
-1. Clone the repository
-2. Create and activate a virtual environment:
+## 🧠 Implementation Choices & Assumptions
+
+### 🔹 Assumptions Made
+1. Single currency — **USD**
+2. Simple product catalog (no categories or tags)
+3. No inventory tracking
+4. Each order has a single shipping address
+5. Only registered users can place orders
+
+---
+
+## ⚙️ Technical Decisions
+
+### 🆚 Stripe Checkout vs Payment Intents
+**Chosen:** `Stripe Checkout`  
+**Reasons:**
+- Faster integration with pre-built UI
+- Strong built-in security and PCI compliance
+- Mobile-responsive out of the box
+- Fewer edge cases vs. manually managing Payment Intents
+
+### 🔒 Preventing Double Charges & Race Conditions
+1. **Order Status Flow**
+   - Orders start as `pending`
+   - Updated to `paid` only after verified Stripe webhook  
+   - Double-check in success handler prevents duplicate confirmation
+
+2. **Session Handling**
+   - Stripe session ID stored in order metadata  
+   - Order status re-verified before marking payment success
+
+---
+
+
+---
+
+## 🛠️ Setup & Installation
+
+### 1️⃣ Clone the Repository
+
 ```bash
-python -m venv venv
-.\venv\Scripts\activate  # Windows
-source venv/bin/activate  # Unix/macOS
+git clone https://github.com/pratik0049/VipraTech_Assignment.git
+cd VipraTech_Assignment
 ```
 
-3. Install dependencies:
+---
+
+### 2️⃣ Create and Activate a Virtual Environment
+
+```bash
+# Create virtual environment
+python -m venv venv
+
+# Activate on Windows
+.\venv\Scripts\activate
+
+# Activate on macOS/Linux
+source venv/bin/activate
+```
+
+---
+
+### 3️⃣ Install Dependencies
+
 ```bash
 pip install -r requirements.txt
 ```
 
-4. Create `.env` file (see `.env.example` below)
-5. Run migrations:
-```bash
-python manage.py migrate
-```
+---
 
-6. Load sample products:
-```bash
-python manage.py seed_products
-```
+### 4️⃣ Create the `.env` File
 
-7. Run the development server:
-```bash
-python manage.py runserver
-```
+Copy the values from `.env.example`
 
-### `.env.example`
-```
+Example:
+
+```env
 DB_NAME=shop_db
 DB_USER=postgres
 DB_PASSWORD=your_password
+
 STRIPE_SECRET_KEY=sk_test_...
 STRIPE_PUBLISHABLE_KEY=pk_test_...
 ```
 
-## Code Quality & Architecture Notes
+---
 
-### Strengths
-1. Clear separation of concerns:
-   - Models for data structure
-   - Views for business logic
-   - Utils for third-party integration
+### 5️⃣ Run Migrations
 
-2. Security considerations:
-   - Login required for sensitive operations
-   - CSRF protection enabled
-   - Stripe keys in environment variables
+```bash
+python manage.py migrate
+```
 
-3. User experience:
-   - Informative error messages
-   - Order history pagination
-   - Recent orders display
+---
 
-### Areas for Improvement
-1. Add unit tests
-2. Implement proper logging
-3. Add inventory management
-4. Consider async processing for webhooks
-5. Add order email notifications
+### 6️⃣ Load Sample Products
+
+```bash
+python manage.py seed_products
+```
+
+---
+
+### 7️⃣ Start the Development Server
+
+```bash
+python manage.py runserver
+```
+
+Then open your browser and visit 👉 **[http://127.0.0.1:8000/](http://127.0.0.1:8000/)**
+
+---
+
+## 🧩 Code Quality & Architecture Notes
+
+### ✅ Strengths
+
+**Separation of Concerns**
+
+* **Models** → Define data structure
+* **Views** → Contain business logic
+* **Utils** → Handle third-party integrations
+
+**Security**
+
+* Authentication required for order placement
+* CSRF protection enabled
+* Stripe keys stored securely in environment variables
+
+**User Experience**
+
+* Simple, intuitive UI
+* Clear error messages
+* “My Orders” section shows recent payments
+
+---
+
