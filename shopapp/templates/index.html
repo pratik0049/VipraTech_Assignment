@@ -1,0 +1,384 @@
+{% extends 'base.html' %}
+
+{% block title %}VipraTech Store{% endblock %}
+
+{% block extra_head %}
+<style>
+    .product-card {
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+    }
+    .card-img-container {
+        height: 200px;
+        overflow: hidden;
+        position: relative;
+        background: #f8f9fa;
+    }
+    .card-img-container img {
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+    }
+    .price-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: rgba(255,255,255,0.95);
+        padding: 8px 12px;
+        border-radius: 20px;
+        font-weight: bold;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .category-header {
+        padding: 20px 0;
+        margin: 20px 0;
+        border-bottom: 2px solid #e9ecef;
+        font-weight: 600;
+    }
+    .recent-orders {
+        background: #f8f9fa;
+        border-radius: 15px;
+        padding: 20px;
+    }
+    .order-item {
+        background: white;
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    .qty-input {
+        max-width: 80px;
+        text-align: center;
+    }
+    .cart-btn {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1000;
+        padding: 15px 30px;
+        border-radius: 30px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        background: #2c3e50;
+        color: white;
+        transition: all 0.3s ease;
+    }
+    .cart-btn:hover {
+        background: #34495e;
+        transform: translateY(-2px);
+        color: white;
+    }
+    .cart-count {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        background: #e74c3c;
+        color: white;
+        border-radius: 50%;
+        width: 22px;
+        height: 22px;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid white;
+    }
+    #cart-sidebar {
+        position: fixed;
+        top: 0;
+        right: -400px;
+        width: 400px;
+        height: 100vh;
+        background: white;
+        box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+        z-index: 1050;
+        transition: right 0.3s ease;
+        padding: 20px;
+    }
+    #cart-sidebar.show {
+        right: 0;
+    }
+    .cart-item {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        border-bottom: 1px solid #eee;
+        position: relative;
+    }
+    .cart-item img {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-right: 15px;
+    }
+    .cart-item .remove-item {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #e74c3c;
+        cursor: pointer;
+    }
+    .cart-total {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 20px;
+        background: white;
+        box-shadow: 0 -5px 15px rgba(0,0,0,0.1);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+    <div class="container-fluid py-4">
+        <div class="row">
+            <!-- Main Product Section -->
+            <div class="col-lg-9">
+                <form method="post" id="orderForm">
+                    {% csrf_token %}
+                    
+                    <!-- Categories -->
+                    <div class="category-section mb-5">
+                        <h3 class="category-header">Featured Products</h3>
+                        <div class="row g-4">
+                            {% for product in products %}
+                                <div class="col-md-4 col-lg-4">
+                                    <div class="card h-100 product-card border-0">
+                                        <div class="card-img-container">
+                                            <img src="{{ product.image_url }}" alt="{{ product.name }}">
+                                            <div class="price-badge">${{ product.price }}</div>
+                                        </div>
+                                        <div class="card-body">
+                                            <h5 class="card-title mb-3">{{ product.name }}</h5>
+                                            <p class="card-text text-muted small">{{ product.description }}</p>
+                                            <div class="quantity-control mt-3">
+                                                <div class="d-flex align-items-center justify-content-end">
+                                                    <button type="button" class="btn btn-outline-secondary quantity-btn" 
+                                                            onclick="updateQuantity('qty_{{ product.id }}', -1)">
+                                                        <i class="fas fa-minus"></i>
+                                                    </button>
+                                                    <input type="number" 
+                                                           class="form-control qty-input mx-2"
+                                                           id="qty_{{ product.id }}"
+                                                           name="qty_{{ product.id }}" 
+                                                           min="0" 
+                                                           max="10" 
+                                                           value="0"
+                                                           readonly>
+                                                    <button type="button" class="btn btn-outline-secondary quantity-btn"
+                                                            onclick="updateQuantity('qty_{{ product.id }}', 1)">
+                                                        <i class="fas fa-plus"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            <style>
+                                                .quantity-control .qty-input {
+                                                    width: 60px;
+                                                    text-align: center;
+                                                    border: 1px solid #dee2e6;
+                                                    border-radius: 8px;
+                                                    padding: 0.375rem 0.5rem;
+                                                }
+                                                .quantity-btn {
+                                                    width: 36px;
+                                                    height: 36px;
+                                                    padding: 0;
+                                                    display: flex;
+                                                    align-items: center;
+                                                    justify-content: center;
+                                                    border-radius: 8px;
+                                                    transition: all 0.2s ease;
+                                                }
+                                                .quantity-btn:hover {
+                                                    background: var(--primary-color);
+                                                    color: white;
+                                                    border-color: var(--primary-color);
+                                                }
+                                                .quantity-btn:active {
+                                                    transform: scale(0.95);
+                                                }
+                                                .qty-input::-webkit-inner-spin-button,
+                                                .qty-input::-webkit-outer-spin-button {
+                                                    -webkit-appearance: none;
+                                                    margin: 0;
+                                                }
+                                                .qty-input {
+                                                    -moz-appearance: textfield;
+                                                }
+                                            </style>
+
+                                            <script>
+                                                function updateQuantity(inputId, change) {
+                                                    const input = document.getElementById(inputId);
+                                                    let value = parseInt(input.value) + change;
+                                                    value = Math.max(0, Math.min(10, value)); // Clamp between 0 and 10
+                                                    input.value = value;
+                                                    
+                                                    // Trigger cart update if it exists
+                                                    if (typeof updateCart === 'function') {
+                                                        updateCart();
+                                                    }
+                                                }
+                                            </script>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn cart-btn" onclick="updateCart()">
+                        <i class="fas fa-shopping-cart"></i> Cart <span class="cart-count">0</span>
+                    </button>
+
+                    <!-- Cart Sidebar -->
+                    <div id="cart-sidebar">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h4 class="m-0">Shopping Cart</h4>
+                            <button type="button" class="btn-close" onclick="toggleCart()"></button>
+                        </div>
+                        <div id="cart-items" class="mb-4" style="max-height: calc(100vh - 250px); overflow-y: auto;">
+                            <!-- Cart items will be populated here -->
+                        </div>
+                        <div class="cart-total">
+                            <div class="d-flex justify-content-between mb-3">
+                                <h5>Total:</h5>
+                                <h5 id="cart-total">$0.00</h5>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-lock me-2"></i>Checkout
+                            </button>
+                        </div>
+                    </div>
+
+                    <script>
+                    function updateCart() {
+                        let total = 0;
+                        let itemCount = 0;
+                        const cartItems = document.getElementById('cart-items');
+                        cartItems.innerHTML = '';
+
+                        // Get all quantity inputs
+                        const inputs = document.querySelectorAll('input[type="number"]');
+                        inputs.forEach(input => {
+                            const qty = parseInt(input.value);
+                            if (qty > 0) {
+                                const card = input.closest('.product-card');
+                                const title = card.querySelector('.card-title').textContent;
+                                const price = parseFloat(card.querySelector('.price-badge').textContent.replace('$', ''));
+                                const img = card.querySelector('img').src;
+                                
+                                const subtotal = price * qty;
+                                total += subtotal;
+                                itemCount += qty;
+
+                                // Add item to cart
+                                const itemHtml = `
+                                    <div class="cart-item">
+                                        <img src="${img}" alt="${title}">
+                                        <div>
+                                            <h6 class="mb-1">${title}</h6>
+                                            <div class="d-flex align-items-center">
+                                                <span class="me-2">${qty} × $${price.toFixed(2)}</span>
+                                                <strong>$${subtotal.toFixed(2)}</strong>
+                                            </div>
+                                        </div>
+                                        <i class="fas fa-times remove-item" onclick="removeItem(this)"></i>
+                                    </div>
+                                `;
+                                cartItems.innerHTML += itemHtml;
+                            }
+                        });
+
+                        // Update cart count and total
+                        document.querySelector('.cart-count').textContent = itemCount;
+                        document.getElementById('cart-total').textContent = `$${total.toFixed(2)}`;
+
+                        // Show cart sidebar
+                        toggleCart(true);
+                    }
+
+                    function toggleCart(show = null) {
+                        const cart = document.getElementById('cart-sidebar');
+                        if (show === null) {
+                            cart.classList.toggle('show');
+                        } else if (show) {
+                            cart.classList.add('show');
+                        } else {
+                            cart.classList.remove('show');
+                        }
+                    }
+
+                    function removeItem(element) {
+                        const item = element.closest('.cart-item');
+                        const title = item.querySelector('h6').textContent;
+                        
+                        // Find and reset the quantity input for this item
+                        document.querySelectorAll('.product-card').forEach(card => {
+                            if (card.querySelector('.card-title').textContent === title) {
+                                card.querySelector('input[type="number"]').value = 0;
+                            }
+                        });
+
+                        // Update cart
+                        updateCart();
+                    }
+                    </script>
+                </form>
+            </div>
+
+            <!-- Recent Orders Sidebar -->
+            <div class="col-lg-3">
+                <div class="recent-orders">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h4 class="m-0">Recent Orders</h4>
+                        <a href="{% url 'order_history' %}" class="btn btn-sm btn-outline-primary">View All</a>
+                    </div>
+                    
+                    {% if recent_orders %}
+                        {% for order in recent_orders %}
+                            <div class="order-item">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <small class="text-muted">{{ order.created_at|date:"M d, Y H:i" }}</small>
+                                    <span class="badge {% if order.status == 'paid' %}bg-success{% else %}bg-warning{% endif %}">
+                                        {{ order.status|title }}
+                                    </span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span class="h6 mb-2">${{ order.total_amount }}</span>
+                                    <small class="text-muted">{{ order.line_items|length }} item(s)</small>
+                                </div>
+                                <div class="small text-muted">
+                                    ID: {{ order.stripe_payment_intent|slice:":8" }}...
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center text-muted py-4">
+                            <i class="fas fa-shopping-bag fa-2x mb-3"></i>
+                            <p>No orders yet</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% else %}
+    <div class="container">
+        <div class="text-center py-5">
+            <h2 class="mb-4">Welcome to VipraTech Store</h2>
+            <p class="lead mb-4">Please login or register to start shopping</p>
+            <a href="{% url 'login' %}" class="btn btn-primary btn-lg me-3">Login</a>
+            <a href="{% url 'register' %}" class="btn btn-outline-primary btn-lg">Register</a>
+        </div>
+    </div>
+{% endif %}
+{% endblock %}
