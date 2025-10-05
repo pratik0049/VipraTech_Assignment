@@ -32,19 +32,19 @@ A full-stack **Django + Stripe Checkout** application that allows users to brows
 ## 🖼️ Screenshots
 
 **Register**  
-<img src="shopapp/images/Register.png" width="300"/>
+<img src="shopapp/images/Register.png" width="500"/>
 
 **Main**  
-<img src="shopapp/images/main.png" width="300"/>
+<img src="shopapp/images/main.png" width="500"/>
 
 **Checkout**  
-<img src="shopapp/images/checkout.png" width="300"/>
+<img src="shopapp/images/checkout.png" width="500"/>
 
 **Stripe**  
-<img src="shopapp/images/stripe.png" width="300"/>
+<img src="shopapp/images/stripe.png" width="500"/>
 
 **Payment**  
-<img src="shopapp/images/payment.png" width="300"/>
+<img src="shopapp/images/payment.png" width="500"/>
 
 **View Order**  
 <img src="shopapp/images/vieworder.png" width="300"/>
