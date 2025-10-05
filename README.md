@@ -1,16 +1,33 @@
 # 🛍️ ShopApp — Django E-commerce with Stripe Integration
 
 A full-stack **Django + Stripe Checkout** application that allows users to browse products, add them to the cart, make secure payments, and view their order history.
+# VipraTech_Assignment
 
-🔄 Project Flow
+## 🔄 Project Flow
 
-1️⃣ Home Page – Shows 3 fixed products where users enter quantity and click Buy.
-2️⃣ Checkout – Sends data to Django backend to create a Stripe Checkout Session.
-3️⃣ Payment – User is redirected to Stripe’s test payment page for secure payment.
-4️⃣ Order Creation – After successful payment, an Order is saved in the database with payment details.
-5️⃣ My Orders – Users can view all past orders, total amount, and payment status.
-6️⃣ Admin – Manage products, orders, and transactions.
----
+1️⃣ **Home Page**  
+- Displays 3 fixed products.  
+- Users can enter quantities and click **Buy**.
+
+2️⃣ **Checkout**  
+- Sends order data to the Django backend.  
+- Creates a **Stripe Checkout Session** for secure payment.
+
+3️⃣ **Payment**  
+- User is redirected to **Stripe’s test payment page**.  
+- Payment is completed securely.
+
+4️⃣ **Order Creation**  
+- After successful payment, an **Order** is saved in the database.  
+- Stores payment details like amount, status, and timestamp.
+
+5️⃣ **My Orders**  
+- Users can view all past orders.  
+- Displays **total amount** and **payment status** for each order.
+
+6️⃣ **Admin Panel**  
+- Manage **products**, **orders**, and **transactions**.
+
 
 ## 🖼️ Screenshots
 
@@ -19,13 +36,7 @@ A full-stack **Django + Stripe Checkout** application that allows users to brows
 | <img src="images/Register.png" width="200"/> | <img src="images/main.png" width="200"/> | <img src="images/checkout.png" width="200"/> | <img src="images/stripe.png" width="200"/> | <img src="images/payment.png" width="200"/> | <img src="images/vieworder.png" width="200"/> | <img src="images/vieworderhistory.png" width="200"/> |
 
 
----
 
-## 🚀 Repository
-
-**GitHub URL:** [https://github.com/pratik0049/VipraTech_Assignment](https://github.com/pratik0049/VipraTech_Assignment)
-
----
 
 ## 🧠 Implementation Choices & Assumptions
 
