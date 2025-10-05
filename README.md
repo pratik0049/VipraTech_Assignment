@@ -1,7 +1,7 @@
 # 🛍️ ShopApp — Django E-commerce with Stripe Integration
 
 A full-stack **Django + Stripe Checkout** application that allows users to browse products, add them to the cart, make secure payments, and view their order history.
-# VipraTech_Assignment
+
 
 ## 🔄 Project Flow
 
@@ -88,7 +88,6 @@ A full-stack **Django + Stripe Checkout** application that allows users to brows
 
 ---
 
-Here’s your **README Setup & Installation** section rewritten in clean and properly formatted Markdown syntax 👇
 
 ---
 
@@ -128,7 +127,7 @@ pip install -r requirements.txt
 
 ### 4️⃣ Create the `.env` File
 
-Copy the values from `.env.example` and update your credentials accordingly.
+Copy the values from `.env.example`
 
 Example:
 
