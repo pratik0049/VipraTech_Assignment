@@ -8,7 +8,7 @@ A full-stack **Django + Stripe Checkout** application that allows users to brows
 
 | Register | Home | Checkout | Stripe | Payment | View Order | Order History |
 |-----------|------|-----------|---------|-----------|-------------|----------------|
-| ![Register](images/Register.png) | ![Main](images/Main.png) | ![Checkout](images/Checkout.png) | ![Stripe](images/Stripe.png) | ![Payment](images/Payment.png) | ![View Order](images/ViewOrder.png) | ![View Order History](images/ViewOrderHistory.png) |
+| ![Register](images/Register.png) | ![Main](images/main.png) | ![Checkout](images/checkout.png) | ![Stripe](images/stripe.png) | ![Payment](images/payment.png) | ![View Order](images/vieworder.png) | ![View Order History](images/vieworderhistory.png) |
 
 
 ---
